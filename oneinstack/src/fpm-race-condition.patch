@@ -1,0 +1,14 @@
+diff --git sapi/fpm/fpm/events/epoll.c sapi/fpm/fpm/events/epoll.c
+index c9c7f1f..3676816 100644
+--- sapi/fpm/fpm/events/epoll.c
++++ sapi/fpm/fpm/events/epoll.c
+@@ -140,7 +140,8 @@ static int fpm_event_epoll_wait(struct fpm_event_queue_s *queue, unsigned long i
+ 		}
+ 
+ 		/* fire the event */
+-		fpm_event_fire((struct fpm_event_s *)epollfds[i].data.ptr);
++		if (epollfds[i].events != EPOLLHUP)
++			fpm_event_fire((struct fpm_event_s *)epollfds[i].data.ptr);
+ 
+ 		/* sanity check */
+ 		if (fpm_globals.parent_pid != getpid()) {
